@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 export class BpmnModelerBuilder {
   contents: string;
   resources: any;
@@ -9,11 +9,13 @@ export class BpmnModelerBuilder {
   }
 
   private removeNewLines(contents: string): string {
-    return contents.replace(/(\r\n|\n|\r)/gm, ' ');
+    return contents.replace(/(\r\n|\n|\r)/gm, " ");
   }
 
   public buildModelerView(): string {
     this.contents = this.removeNewLines(this.contents);
+
+    const contentsB64 = Buffer.from(this.contents, "utf8").toString("base64");
 
     const head = `<!DOCTYPE html>
       <html>
@@ -23,16 +25,7 @@ export class BpmnModelerBuilder {
           <title>BPMN Modeler</title>
 
           <!-- modeler distro -->
-          <script src="${this.resources.modelerDistro}"></script>
-
-          <!-- required modeler styles -->
-          <link rel="stylesheet" href="${this.resources.diagramStyles}">
-          <link rel="stylesheet" href="${this.resources.bpmnFont}">
-
-          <link rel="stylesheet" href="${this.resources.modelerStyles}">
-
-          <!-- vscode icons -->
-          <link rel="stylesheet" href="${this.resources.codiconsFont}">
+          <script src="${this.resources.main}"></script>
 
           <style>
             /*
@@ -57,7 +50,6 @@ export class BpmnModelerBuilder {
         </div>
 
         <script>
-
           const vscode = acquireVsCodeApi();
 
           // (1) persist web view state
@@ -144,12 +136,12 @@ export class BpmnModelerBuilder {
           }
 
           // open diagram
-          openDiagram('${this.contents}');
+          openDiagram(atob('${contentsB64}'));
         </script>
       </body>
     `;
 
-    const tail = ['</html>'].join('\n');
+    const tail = ["</html>"].join("\n");
 
     return head + body + tail;
   }

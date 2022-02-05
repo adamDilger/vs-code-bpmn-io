@@ -1,34 +1,33 @@
-'use strict';
-import * as vscode from 'vscode';
-import * as path from 'path';
+"use strict";
+import * as vscode from "vscode";
+import * as path from "path";
 
-import { BpmnModelerBuilder } from './bpmnModelerBuilder';
+import { BpmnModelerBuilder } from "./bpmnModelerBuilder";
 
-const fs = require('fs');
+const fs = require("fs");
 
 export class EditingProvider {
-
-  public constructor(private _context: vscode.ExtensionContext) { }
+  public constructor(private _context: vscode.ExtensionContext) {}
 
   private getUri(webview: vscode.Webview, ...p: string[]): vscode.Uri {
-    const fileUri = vscode.Uri.file(path.join(this._context.extensionPath, ...p));
+    const fileUri = vscode.Uri.file(
+      path.join(this._context.extensionPath, ...p)
+    );
 
     return webview.asWebviewUri(fileUri);
   }
 
-  public provideTextDocumentContent(localResource: vscode.Uri, webview: vscode.Webview): string {
-
+  public provideTextDocumentContent(
+    localResource: vscode.Uri,
+    webview: vscode.Webview
+  ): string {
     const localDocumentPath = localResource.fsPath;
 
-    const contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
+    const contents = fs.readFileSync(localDocumentPath, { encoding: "utf8" });
 
     const builder = new BpmnModelerBuilder(contents, {
-      modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
-      diagramStyles: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
-      bpmnFont: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css'),
-      modelerStyles: this.getUri(webview, 'out', 'assets', 'modeler.css'),
-      codiconsFont: this.getUri(webview, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'),
-      resourceUri: localResource
+      main: this.getUri(webview, "out", "assets", "main.js"),
+      resourceUri: localResource,
     });
 
     return builder.buildModelerView();
