@@ -3,8 +3,8 @@
   "displayName": "Activiti BPMN Editor",
   "description": "Edit BPMN 2.0 files. Based on bpmn.io tools.",
   "license": "MIT",
-  "version": "0.14.0",
-  "publisher": "bpmn-io",
+  "version": "0.14.1",
+  "publisher": "adamDilger",
   "repository": "https://github.com/adamDilger/vs-code-bpmn-io/",
   "engines": {
     "vscode": "^1.63.1"
