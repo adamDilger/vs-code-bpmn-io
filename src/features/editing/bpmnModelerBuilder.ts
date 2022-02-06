@@ -42,6 +42,7 @@ export class BpmnModelerBuilder {
       <body>
         <div class="content">
           <div id="canvas"></div>
+          <div id="properties"></div>
         </div>
 
         <div class="buttons">
@@ -67,9 +68,19 @@ export class BpmnModelerBuilder {
           // (3) bootstrap modeler instance
           const bpmnModeler = new BpmnJS({
             container: '#canvas',
-            keyboard: { bindTo: document }
+            keyboard: { bindTo: document },
+            additionalModules: [
+              PropertiesPanel,
+              ActivitiPanelProvider,
+            ],
+            propertiesPanel: {   
+              parent: '#properties'
+            },
+            moddleExtensions: {
+              activiti: ActivitiModdleDescriptor
+            }
           });
-
+          
           keyboardBindings();
 
           /**

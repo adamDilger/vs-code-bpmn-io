@@ -3,11 +3,11 @@
   "displayName": "BPMN.io Editor",
   "description": "Edit BPMN 2.0 files. Based on bpmn.io tools.",
   "license": "MIT",
-  "version": "0.12.0",
+  "version": "0.14.0",
   "publisher": "bpmn-io",
   "repository": "https://github.com/bpmn-io/vs-code-bpmn-io/",
   "engines": {
-    "vscode": "^1.38.0"
+    "vscode": "^1.63.1"
   },
   "icon": "resources/logo_marketplace.png",
   "categories": [
@@ -85,10 +85,9 @@
   "scripts": {
     "all": "run-s test",
     "vscode:prepublish": "npm run compile",
-    "compile": "run-s compile:clean compile:ts compile:assets",
+    "compile": "run-s compile:clean compile:ts webpack",
     "compile:ts": "tsc -p ./",
     "compile:clean": "shx rm -rf out",
-    "compile:assets": "shx cp -r src/assets out",
     "webpack": "webpack --config src/webview/webpack.config.js",
     "watch": "tsc -watch -p ./",
     "pretest": "run-s compile",
@@ -118,7 +117,9 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
+    "activiti-bpmn-moddle": "github:adamDilger/camunda-bpmn-moddle#activiti",
     "bpmn-js": "^8.8.3",
+    "bpmn-js-properties-panel": "^0.46.0",
     "css-loader": "^6.6.0",
     "style-loader": "^3.3.1",
     "vscode-codicons": "^0.0.17",
