@@ -6,7 +6,7 @@ import BpmnJS from 'bpmn-js/lib/Modeler';
 import PropertiesPanel from 'bpmn-js-properties-panel';
 import ActivitiPanelProvider from 'bpmn-js-properties-panel/lib/provider/activiti';
 
-import ActivitiModdleDescriptor from 'camunda-bpmn-moddle/resources/activiti.json';
+import ActivitiModdleDescriptor from 'activiti-bpmn-moddle/resources/activiti.json';
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";

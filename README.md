@@ -1,6 +1,12 @@
-# vs-code-bpmn-io
+# VSCode Activiti bpmn-io editor (fork of vs-code-bpmn-io)
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/bpmn-io/vs-code-bpmn-io) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg) [![CI](https://github.com/bpmn-io/vs-code-bpmn-io/workflows/CI/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions?query=workflow%3ACI)
+This is a WIP version of [vs-code-bpmn-io](https://github.com/bpmn-io/vs-code-bpmn-io/), with minimal changes required to replace `camunda:` references to `activiti:`, and
+the bpmn-js-properties-panel added.
+
+---
+
+
+# vs-code-bpmn-io
 
 Display and edit BPMN diagrams in VS Code using [bpmn.io](https://bpmn.io/) tools.
 
