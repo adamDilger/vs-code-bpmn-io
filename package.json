@@ -1,7 +1,7 @@
 {
   "name": "vs-code-bpmn-io",
-  "displayName": "BPMN.io Editor",
-  "description": "Edit BPMN 2.0 files, powered by bpmn.io tools.",
+  "displayName": "Activiti BPMN.io Editor",
+  "description": "Edit Activiti BPMN 2.0 files, powered by bpmn.io tools.",
   "license": "MIT",
   "version": "0.15.4",
   "publisher": "bpmn-io",
@@ -94,13 +94,15 @@
     "all": "run-s lint test",
     "lint": "eslint . --ext js,ts",
     "vscode:prepublish": "npm run compile",
-    "compile": "run-s compile:clean compile:ts compile:assets",
+    "compile": "run-s compile:clean compile:ts compile:assets compile:webviewe",
     "compile:ts": "tsc -p ./",
     "compile:clean": "shx rm -rf out",
     "compile:assets": "shx cp -r src/assets out",
     "watch:ts": "tsc -watch -p ./",
     "watch:assets": "nodemon -e css --watch src/assets -x \"npm run compile:assets\"",
     "watch": "run-p watch:ts watch:assets",
+    "compile:webview": "rollup -c rollup.config.mjs",
+    "watch:webview": "rollup --watch -c rollup.config.mjs",
     "pretest": "run-s compile",
     "test": "node ./out/test/runTest.js"
   },
@@ -118,6 +120,7 @@
     "@vscode/test-electron": "^2.3.3",
     "chai": "^4.3.7",
     "eslint": "^8.44.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-bpmn-io": "^1.0.0",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
@@ -131,7 +134,11 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.33",
+    "activiti-bpmn-moddle": "^4.4.0",
+    "activiti-bpmn-properties-provider": "^0.0.1",
     "bpmn-js": "^13.2.2",
+    "bpmn-js-properties-panel": "^4.0.2",
+    "esbuild": "^0.19.2",
     "ids": "^1.0.3"
   }
 }

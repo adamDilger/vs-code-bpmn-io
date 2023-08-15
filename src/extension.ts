@@ -15,11 +15,10 @@ const editingType = 'bpmn-io.editing';
 const editCommand = 'extension.bpmn-io.edit';
 
 function createPanel(
-    context: ExtensionContext,
-    uri: Uri,
-    provider: EditingProvider
+  context: ExtensionContext,
+  uri: Uri,
+  provider: EditingProvider
 ): BpmnEditorPanel {
-
   const editorColumn =
     (vscode.window.activeTextEditor &&
       vscode.window.activeTextEditor.viewColumn) ||
@@ -36,21 +35,19 @@ function createPanel(
   panel.webview.html = provider.provideTextDocumentContent(uri, panel.webview);
 
   // set panel icons
-  const {
-    extensionPath
-  } = context;
+  const { extensionPath } = context;
 
   panel.iconPath = {
     light: getUri(extensionPath, 'resources', 'icon_light.svg'),
-    dark: getUri(extensionPath, 'resources', 'icon_dark.svg')
+    dark: getUri(extensionPath, 'resources', 'icon_dark.svg'),
   };
 
   // handling messages from the webview content
   panel.webview.onDidReceiveMessage(
-    message => {
+    (message) => {
       switch (message.command) {
-      case 'saveContent':
-        return saveFile(uri, message.content);
+        case 'saveContent':
+          return saveFile(uri, message.content);
       }
     },
     undefined,
@@ -66,20 +63,19 @@ function saveFile(uri: vscode.Uri, content: string) {
   fs.writeFileSync(docPath, content, { encoding: 'utf8' });
 }
 
-function refresh(
-    editor: BpmnEditorPanel
-) {
-  const {
-    resource,
-    panel,
-    provider
-  } = editor;
+function refresh(editor: BpmnEditorPanel) {
+  const { resource, panel, provider } = editor;
 
-  panel.webview.html =
-    provider.provideTextDocumentContent(resource, panel.webview);
+  panel.webview.html = provider.provideTextDocumentContent(
+    resource,
+    panel.webview
+  );
 }
 
-function autoSaveIfConfigured(editorPanel: BpmnEditorPanel, expectedStates: string[]) {
+function autoSaveIfConfigured(
+  editorPanel: BpmnEditorPanel,
+  expectedStates: string[]
+) {
   const config = vscode.workspace.getConfiguration();
 
   const autoSaveConfiguration: any = config.get('files.autoSave');
@@ -95,7 +91,6 @@ function autoSaveIfConfigured(editorPanel: BpmnEditorPanel, expectedStates: stri
   sendMessage('saveFile', editorPanel.panel.webview);
 }
 
-
 // Extension API //////////
 
 export interface BpmnEditorPanel {
@@ -105,20 +100,15 @@ export interface BpmnEditorPanel {
 }
 
 export function activate(context: ExtensionContext) {
-
   const openedPanels: BpmnEditorPanel[] = [];
   const editingProvider = new EditingProvider(context);
 
   const _revealIfAlreadyOpened = (
-      uri: Uri,
-      provider: EditingProvider
+    uri: Uri,
+    provider: EditingProvider
   ): boolean => {
-
-    const opened = openedPanels.find(panel => {
-      const {
-        resource,
-        provider: panelProvider
-      } = panel;
+    const opened = openedPanels.find((panel) => {
+      const { resource, provider: panelProvider } = panel;
 
       return resource.fsPath === uri.fsPath && panelProvider === provider;
     });
@@ -132,10 +122,7 @@ export function activate(context: ExtensionContext) {
     return true;
   };
 
-  const _registerPanel = (
-      editorPanel: BpmnEditorPanel
-  ): void => {
-
+  const _registerPanel = (editorPanel: BpmnEditorPanel): void => {
     // on editor closed
     editorPanel.panel.onDidDispose(() => {
       openedPanels.splice(openedPanels.indexOf(editorPanel), 1);
@@ -153,37 +140,37 @@ export function activate(context: ExtensionContext) {
     editorPanel.panel.onDidChangeViewState(() => {
       refresh(editorPanel);
 
-      autoSaveIfConfigured(editorPanel, [ 'onFocusChange', 'onWindowChange' ]);
+      autoSaveIfConfigured(editorPanel, ['onFocusChange', 'onWindowChange']);
     });
 
     openedPanels.push(editorPanel);
   };
 
   const _registerCommands = (): void => {
+    context.subscriptions.push(
+      vscode.commands.registerCommand(editCommand, (uri: Uri) => {
+        const documentUri = getDocumentUri(uri);
 
-    context.subscriptions.push(vscode.commands.registerCommand(editCommand, (uri: Uri) => {
-      const documentUri = getDocumentUri(uri);
+        if (
+          documentUri &&
+          !_revealIfAlreadyOpened(documentUri, editingProvider)
+        ) {
+          const panel = createPanel(context, documentUri, editingProvider);
 
-      if (documentUri && !_revealIfAlreadyOpened(documentUri, editingProvider)) {
-        const panel = createPanel(context, documentUri, editingProvider);
+          _registerPanel(panel);
 
-        _registerPanel(panel);
-
-        return panel;
-      }
-    }));
+          return panel;
+        }
+      })
+    );
   };
 
-  const _serializePanel = (
-      provider: EditingProvider
-  ): void => {
-
+  const _serializePanel = (provider: EditingProvider): void => {
     const viewType = editingType;
 
     if (vscode.window.registerWebviewPanelSerializer) {
       vscode.window.registerWebviewPanelSerializer(viewType, {
         async deserializeWebviewPanel(panel: WebviewPanel, state: any) {
-
           if (!state || !state.resourcePath) {
             return;
           }
@@ -192,11 +179,13 @@ export function activate(context: ExtensionContext) {
 
           panel.title = panel.title || getPanelTitle(resource, provider);
           panel.webview.options = getWebviewOptions(context, resource);
-          panel.webview.html =
-            provider.provideTextDocumentContent(resource, panel.webview);
+          panel.webview.html = provider.provideTextDocumentContent(
+            resource,
+            panel.webview
+          );
 
           _registerPanel({ panel, resource, provider });
-        }
+        },
       });
     }
   };
@@ -209,11 +198,7 @@ export function deactivate() {}
 
 // helper ///////
 
-function getPanelTitle(
-    uri: Uri,
-    _provider: EditingProvider
-): string {
-
+function getPanelTitle(uri: Uri, _provider: EditingProvider): string {
   const prefix = 'Edit';
 
   return `${prefix}: ${path.basename(uri.fsPath)}`;
@@ -223,16 +208,15 @@ function getWebviewOptions(context: ExtensionContext, uri: Uri) {
   return {
     enableScripts: true,
     retainContextWhenHidden: true,
-    localResourceRoots: getLocalResourceRoots(context, uri)
+    localResourceRoots: getLocalResourceRoots(context, uri),
   };
 }
 
 function getLocalResourceRoots(
-    context: ExtensionContext,
-    resource: vscode.Uri
+  context: ExtensionContext,
+  resource: vscode.Uri
 ): vscode.Uri[] {
-
-  const baseRoots = [ vscode.Uri.file(context.extensionPath) ];
+  const baseRoots = [vscode.Uri.file(context.extensionPath)];
   const folder = vscode.workspace.getWorkspaceFolder(resource);
 
   if (folder) {

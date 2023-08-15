@@ -17,7 +17,9 @@ export class BpmnModelerBuilder {
   }
 
   public buildModelerView(): string {
-    this.contents = this.removeNewLines(this.replaceSingleQuotes(this.contents));
+    this.contents = this.removeNewLines(
+      this.replaceSingleQuotes(this.contents)
+    );
 
     const head = `<!DOCTYPE html>
       <html>
@@ -27,14 +29,10 @@ export class BpmnModelerBuilder {
           <title>BPMN Modeler</title>
 
           <!-- modeler distro -->
-          <script src="${this.resources.modelerDistro}"></script>
+          <script src="${this.resources.activitiBpmnDistro}"></script>
 
           <!-- required modeler styles -->
-          <link rel="stylesheet" href="${this.resources.diagramStyles}">
-          <link rel="stylesheet" href="${this.resources.bpmnStyles}">
-          <link rel="stylesheet" href="${this.resources.bpmnFont}">
-
-          <link rel="stylesheet" href="${this.resources.modelerStyles}">
+          <link rel="stylesheet" href="${this.resources.activitiBpmnStyles}">
 
           <!-- vscode icons -->
           <link rel="stylesheet" href="${this.resources.codiconsFont}">
@@ -54,6 +52,7 @@ export class BpmnModelerBuilder {
       <body>
         <div class="content">
           <div id="canvas"></div>
+          <div id="properties"></div>
         </div>
 
         <div class="buttons">
@@ -78,8 +77,22 @@ export class BpmnModelerBuilder {
           })
 
           // (3) bootstrap modeler instance
-          const bpmnModeler = new BpmnJS({
+          console.log("FUK", window._ActivitiBpmn);
+          const _ActivitiBpmn = window._ActivitiBpmn;
+          const bpmnModeler = new _ActivitiBpmn.BpmnJS({
             container: '#canvas',
+            propertiesPanel: {
+              parent: '#properties'
+            },
+            additionalModules: [
+              _ActivitiBpmn.BpmnPropertiesPanelModule,
+              _ActivitiBpmn.BpmnPropertiesProviderModule,
+              _ActivitiBpmn.activitiExtensionModule,
+              _ActivitiBpmn.ActivitiPropertiesProvider,
+            ],
+            moddleExtensions: {
+              activiti: _ActivitiBpmn.activitiModdle
+            },
             keyboard: { bindTo: document }
           });
 
@@ -138,6 +151,7 @@ export class BpmnModelerBuilder {
             const keyboard = bpmnModeler.get('keyboard');
 
             keyboard.addListener(function(context) {
+              console.log("keyboard event", context);
 
               const event = context.keyEvent;
 
@@ -154,7 +168,7 @@ export class BpmnModelerBuilder {
       </body>
     `;
 
-    const tail = [ '</html>' ].join('\n');
+    const tail = ['</html>'].join('\n');
 
     return head + body + tail;
   }

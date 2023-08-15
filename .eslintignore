@@ -1,3 +1,6 @@
 .vscode
 .vscode-test
 out
+build.mjs
+
+node_modules/**
