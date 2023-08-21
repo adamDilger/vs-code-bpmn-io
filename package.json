@@ -1,13 +1,13 @@
 {
-  "name": "vs-code-bpmn-io",
-  "displayName": "BPMN.io Editor",
-  "description": "Edit BPMN 2.0 files, powered by bpmn.io tools.",
+  "name": "activiti-vs-code-bpmn-io",
+  "displayName": "Activiti BPMN editor (BPMN.io Editor)",
+  "description": "Edit Activiti BPMN 2.0 files, powered by bpmn.io tools.",
   "license": "MIT",
   "version": "0.16.1",
-  "publisher": "bpmn-io",
+  "publisher": "adamDilger",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bpmn-io/vs-code-bpmn-io"
+    "url": "https://github.com/adamDilger/vs-code-bpmn-io"
   },
   "engines": {
     "vscode": "^1.79.2",
@@ -93,6 +93,9 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.33",
-    "bpmn-js": "^13.2.2"
+    "activiti-bpmn-moddle": "^4.4.0",
+    "activiti-bpmn-properties-provider": "^0.0.1",
+    "bpmn-js": "^13.2.2",
+    "bpmn-js-properties-panel": "^4.0.2"
   }
 }

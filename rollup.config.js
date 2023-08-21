@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import url from '@rollup/plugin-url';
 import typescript from '@rollup/plugin-typescript';
+import json from '@rollup/plugin-json';
 
 import css from 'rollup-plugin-css-only';
 
@@ -26,7 +27,8 @@ module.exports = [
       css({ output: 'bpmn-editor.css' }),
 
       resolve(),
-      commonjs()
+      commonjs(),
+      json(),
     ],
     watch: {
       clearScreen: false

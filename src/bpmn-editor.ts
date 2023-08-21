@@ -474,14 +474,20 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!--
+        These stylesheets conflicted with the bpmn-js-properties-panel input fields so have been removed.
         <link href="${styleResetUri}" rel="stylesheet" />
         <link href="${styleVSCodeUri}" rel="stylesheet" />
+        -->
         <link href="${styleMainUri}" rel="stylesheet" />
 
         <title>BPMN Editor</title>
       </head>
       <body>
-        <div id="canvas"></div>
+        <div id="editor">
+          <div id="canvas"></div>
+          <div id="properties"></div>
+        </div>
 
         <script nonce="${nonce}" src="${scriptUri}"></script>
       </body>

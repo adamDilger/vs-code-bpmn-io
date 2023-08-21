@@ -8,8 +8,22 @@ body {
   background: white;
 }
 
-#canvas {
+#editor {
   overflow: hidden;
   width: 100%;
   height: 100%;
+  display: flex;
+}
+
+#editor > #canvas {
+  flex: 1;
+}
+
+#editor > #properties {
+  width: 400px;
+}
+
+.bio-properties-panel {
+  background-color: var(--group-background-color);
+  border-left: 1px solid var(--group-bottom-border-color);
 }

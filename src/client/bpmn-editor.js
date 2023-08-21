@@ -5,10 +5,20 @@
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-js.css';
+import 'bpmn-js-properties-panel/dist/assets/properties-panel.css';
 
 import './bpmn-editor.css';
 
 import BpmnModeler from 'bpmn-js/lib/Modeler';
+import {
+  BpmnPropertiesPanelModule,
+  BpmnPropertiesProviderModule,
+} from 'bpmn-js-properties-panel';
+
+import activitiExtensionModule from 'activiti-bpmn-moddle/lib';
+import activitiModdle from 'activiti-bpmn-moddle/resources/activiti';
+
+import ActivitiPropertiesProvider from 'activiti-bpmn-properties-provider';
 
 import KeyboardModule from './features/keyboard';
 
@@ -23,8 +33,18 @@ const modeler = new BpmnModeler({
     bindTo: document
   },
   additionalModules: [
-    KeyboardModule
-  ]
+    KeyboardModule,
+    BpmnPropertiesPanelModule,
+    BpmnPropertiesProviderModule,
+    activitiExtensionModule,
+    ActivitiPropertiesProvider,
+  ],
+  propertiesPanel: {
+    parent: '#properties'
+  },
+  moddleExtensions: {
+    activiti: activitiModdle
+  },
 });
 
 modeler.on('import.done', event => {
